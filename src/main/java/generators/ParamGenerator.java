@@ -1,11 +1,12 @@
 package generators;
 
-import person.models.Passport;
+import person.models.Phone;
 import person.models.Physical;
 import person.models.appearance.Appearance;
 import person.models.appearance.Hair;
 import person.models.appearance.enums.EyesColor;
 import person.models.appearance.enums.HairColor;
+import utils.MyMath;
 
 import java.util.Random;
 
@@ -13,6 +14,28 @@ import static utils.FileReader.getLinesFromFile;
 import static utils.MyMath.getDigitsSum;
 
 public class ParamGenerator {
+
+    public static final int ONE_HUNDRED = 100;
+    public static final int TEN = 10;
+    public static final int ONE_THOUSAND = 1000;
+    public static final int RATIO = 30;
+    private static final Random random = new Random();
+
+    public static Phone phoneGenerator(String code) {
+        Phone phone = new Phone("N/A");
+
+        int intCode = Integer.parseInt(code);
+        // добавляем телефон, только если введённый код не палиндром
+
+        if (!code.contentEquals(new StringBuilder(code).reverse())) {
+            final String number = "+79"
+                    + String.format("%02d", MyMath.getDigitsSum(intCode))
+                    + String.format("%03d", random.nextInt(1000))
+                    + String.format("%04d", intCode);
+            phone = new Phone(number);
+        }
+        return phone;
+    }
 
     /**
      * по третьей цифре кода:
@@ -22,41 +45,33 @@ public class ParamGenerator {
      *
      * @return .
      */
-    public Appearance gen_Ap(final int c) {
-        final int i = c % 100 / 10;
-        String e = EyesColor.values()[i / 2].name().toLowerCase();
-        String hc = null;
+    public static Appearance appearanceGenerator(final int code) {
+        final int i = code % ONE_HUNDRED / TEN;
+        EyesColor eyes = null;
+        HairColor hairColor = null;
         if (i > 0) {
-            hc = HairColor.values()[i - 1].name().toLowerCase();
+            eyes = EyesColor.values()[i / 2];
+            hairColor = HairColor.values()[i - 1];
         }
-        return new Appearance(e, new Hair(i, hc));
+        return new Appearance(eyes, new Hair(i, hairColor));
     }
 
-    /**
-     * сумма цифр в коде.
-     */
-    public String lngeneration(final int c) {
-        final int i = getDigitsSum(c);
+    private static String getSex(int code, String fileName, int index) {
+        final int i = getDigitsSum(code);
         final String s = (i % 2 == 0) ? "f" : "m";
-        return getLinesFromFile("lastNames_" + s).get(i);
+        return getLinesFromFile(fileName + s).get(index);
     }
 
-    /**
-     * сумма первых двух цифр.
-     */
-    public String fngeneration(final int c) {
-        final int i = getDigitsSum(c);
-        final String s = (i % 2 == 0) ? "f" : "m";
-        return getLinesFromFile("names_" + s).get(getDigitsSum(c / 100));
+    public static String lastNameGenerator(final int code) {
+        return getSex(code, "lastNames_", getDigitsSum(code));
     }
 
-    /**
-     * сумма последних двух цифр.
-     */
-    public String mngeneration(final int c) {
-        final int i = getDigitsSum(c);
-        final String s = (i % 2 == 0) ? "f" : "m";
-        return getLinesFromFile("middleNames_" + s).get(getDigitsSum(c % 100));
+    public static String firstNameGenerator(final int code) {
+        return getSex(code, "names_", getDigitsSum(code / ONE_HUNDRED));
+    }
+
+    public static String middleNameGenerator(final int code) {
+        return getSex(code, "middleNames_", getDigitsSum(code % ONE_HUNDRED));
     }
 
     /**
@@ -65,23 +80,11 @@ public class ParamGenerator {
      * Вес: 30..120
      * Рост: 1..1,9
      */
-    public Physical GenPh(final int c) {
-        final int x = c % 1000 / 100;
-        int v = (x + 1) * 10;
-        int k = 30 + x * 10;
-        double naskolkovysokiychelovek = (100 + x * 10) / 100.00;
-        return new Physical(v, k, naskolkovysokiychelovek);
-    }
-
-    /**
-     * Генерация номера паспорта.
-     *
-     * @param c код
-     * @return номер паспорта
-     */
-    public Passport pNumGen(final int c) {
-        final int d = 999999;
-        final String pn = String.valueOf(c) + new Random().nextInt(d);
-        return new Passport(pn);
+    public static Physical physicalGenerator(final int code) {
+        final int x = code % ONE_THOUSAND / ONE_HUNDRED;
+        int age = (x + 1) * TEN;
+        int weight = RATIO + x * TEN;
+        double height = 1 + (double) x / TEN;
+        return new Physical(age, weight, height);
     }
 }
