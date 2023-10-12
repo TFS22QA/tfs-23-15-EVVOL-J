@@ -1,13 +1,10 @@
 package generators;
 
-import person.models.Passport;
 import person.models.Physical;
 import person.models.appearance.Appearance;
 import person.models.appearance.Hair;
 import person.models.appearance.enums.EyesColor;
 import person.models.appearance.enums.HairColor;
-
-import java.util.Random;
 
 import static utils.FileReader.getLinesFromFile;
 import static utils.MyMath.getDigitsSum;
@@ -73,15 +70,5 @@ public class ParamGenerator {
         return new Physical(v, k, naskolkovysokiychelovek);
     }
 
-    /**
-     * Генерация номера паспорта.
-     *
-     * @param c код
-     * @return номер паспорта
-     */
-    public Passport pNumGen(final int c) {
-        final int d = 999999;
-        final String pn = String.valueOf(c) + new Random().nextInt(d);
-        return new Passport(pn);
-    }
+
 }

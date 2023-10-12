@@ -4,7 +4,6 @@ public class InputProcessor {
 
     public final String processInput(final String input) {
         String result;
-
         if (!input.trim().matches("\\d{4}")) {
             result = "Invalid input.";
         } else {
