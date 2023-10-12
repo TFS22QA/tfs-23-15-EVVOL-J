@@ -14,6 +14,7 @@ public class PersonFactory {
         int intCode=Integer.parseInt(code);
 
         // добавляем телефон, только если введённый код не палиндром
+
         if (!code.equals(new StringBuilder(code).reverse().toString())) {
             final String number = "+79"
                     + String.format("%02d", MyMath.getDigitsSum(intCode))
@@ -25,10 +26,10 @@ public class PersonFactory {
         return new Person(
                 code,
                 lastNameGenerator(intCode),
-                firstNameGeneration(intCode),
-                middleNameGeneration(intCode),
-                GenPh(intCode),
-                gen_Ap(intCode),
+                firstNameGenerator(intCode),
+                middleNameGenerator(intCode),
+                physicalGenerator(intCode),
+                appearanceGenerator(intCode),
                 phone
         );
     }

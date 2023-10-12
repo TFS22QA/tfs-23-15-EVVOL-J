@@ -19,32 +19,32 @@ public class ParamGenerator {
      *
      * @return .
      */
-    public static Appearance gen_Ap(final int c) {
-        final int i = c % 100 / 10;
-        String e = EyesColor.values()[i / 2].name().toLowerCase();
-        String hc = null;
+    public static Appearance appearanceGenerator(final int code) {
+        final int i = code % 100 / 10;
+        EyesColor eyes = EyesColor.values()[i / 2];
+        HairColor hairColor = null;
         if (i > 0) {
-            hc = HairColor.values()[i - 1].name().toLowerCase();
+            hairColor = HairColor.values()[i - 1];
         }
-        return new Appearance(e, new Hair(i, hc));
+        return new Appearance(eyes, new Hair(i, hairColor));
+    }
+
+    private static String getSex(int code, String fileName, int index) {
+        final int i = getDigitsSum(code);
+        final String s = (i % 2 == 0) ? "f" : "m";
+        return getLinesFromFile(fileName + s).get(index);
     }
 
     public static String lastNameGenerator(final int code) {
-        final int i = getDigitsSum(code);
-        final String s = (i % 2 == 0) ? "f" : "m";
-        return getLinesFromFile("lastNames_" + s).get(i);
+        return getSex(code, "lastNames_", getDigitsSum(code));
     }
 
-    public static String firstNameGeneration(final int code) {
-        final int i = getDigitsSum(code);
-        final String s = (i % 2 == 0) ? "f" : "m";
-        return getLinesFromFile("names_" + s).get(getDigitsSum(code / 100));
+    public static String firstNameGenerator(final int code) {
+        return getSex(code, "names_", getDigitsSum(code / 100));
     }
 
-    public static String middleNameGeneration(final int code) {
-        final int i = getDigitsSum(code);
-        final String s = (i % 2 == 0) ? "f" : "m";
-        return getLinesFromFile("middleNames_" + s).get(getDigitsSum(code % 100));
+    public static String middleNameGenerator(final int code) {
+        return getSex(code, "middleNames_", getDigitsSum(code % 100));
     }
 
     /**
@@ -53,13 +53,11 @@ public class ParamGenerator {
      * Вес: 30..120
      * Рост: 1..1,9
      */
-    public static Physical GenPh(final int c) {
-        final int x = c % 1000 / 100;
-        int v = (x + 1) * 10;
-        int k = 30 + x * 10;
-        double naskolkovysokiychelovek = (100 + x * 10) / 100.00;
-        return new Physical(v, k, naskolkovysokiychelovek);
+    public static Physical physicalGenerator(final int code) {
+        final int x = code % 1000 / 100;
+        int age = (x + 1) * 10;
+        int weight = 30 + x * 10;
+        double height = (100 + x * 10) / 100.00;
+        return new Physical(age, weight, height);
     }
-
-
 }
