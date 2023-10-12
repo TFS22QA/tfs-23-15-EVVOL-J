@@ -1,15 +1,41 @@
 package generators;
 
+import person.models.Phone;
 import person.models.Physical;
 import person.models.appearance.Appearance;
 import person.models.appearance.Hair;
 import person.models.appearance.enums.EyesColor;
 import person.models.appearance.enums.HairColor;
+import utils.MyMath;
+
+import java.util.Random;
 
 import static utils.FileReader.getLinesFromFile;
 import static utils.MyMath.getDigitsSum;
 
 public class ParamGenerator {
+
+    public static final int ONE_HUNDRED = 100;
+    public static final int TEN = 10;
+    public static final int ONE_THOUSAND = 1000;
+    public static final int RATIO = 30;
+    private static final Random random = new Random();
+
+    public static Phone phoneGenerator(String code) {
+        Phone phone = new Phone("N/A");
+
+        int intCode = Integer.parseInt(code);
+        // добавляем телефон, только если введённый код не палиндром
+
+        if (!code.contentEquals(new StringBuilder(code).reverse())) {
+            final String number = "+79"
+                    + String.format("%02d", MyMath.getDigitsSum(intCode))
+                    + String.format("%03d", random.nextInt(1000))
+                    + String.format("%04d", intCode);
+            phone = new Phone(number);
+        }
+        return phone;
+    }
 
     /**
      * по третьей цифре кода:
@@ -20,10 +46,11 @@ public class ParamGenerator {
      * @return .
      */
     public static Appearance appearanceGenerator(final int code) {
-        final int i = code % 100 / 10;
-        EyesColor eyes = EyesColor.values()[i / 2];
+        final int i = code % ONE_HUNDRED / TEN;
+        EyesColor eyes = null;
         HairColor hairColor = null;
         if (i > 0) {
+            eyes = EyesColor.values()[i / 2];
             hairColor = HairColor.values()[i - 1];
         }
         return new Appearance(eyes, new Hair(i, hairColor));
@@ -40,11 +67,11 @@ public class ParamGenerator {
     }
 
     public static String firstNameGenerator(final int code) {
-        return getSex(code, "names_", getDigitsSum(code / 100));
+        return getSex(code, "names_", getDigitsSum(code / ONE_HUNDRED));
     }
 
     public static String middleNameGenerator(final int code) {
-        return getSex(code, "middleNames_", getDigitsSum(code % 100));
+        return getSex(code, "middleNames_", getDigitsSum(code % ONE_HUNDRED));
     }
 
     /**
@@ -54,10 +81,10 @@ public class ParamGenerator {
      * Рост: 1..1,9
      */
     public static Physical physicalGenerator(final int code) {
-        final int x = code % 1000 / 100;
-        int age = (x + 1) * 10;
-        int weight = 30 + x * 10;
-        double height = (100 + x * 10) / 100.00;
+        final int x = code % ONE_THOUSAND / ONE_HUNDRED;
+        int age = (x + 1) * TEN;
+        int weight = RATIO + x * TEN;
+        double height = 1 + (double) x / TEN;
         return new Physical(age, weight, height);
     }
 }

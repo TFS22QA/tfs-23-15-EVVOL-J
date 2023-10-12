@@ -13,6 +13,7 @@ public class FileReader {
         try {
             list = Files.readAllLines(new File("src/main/resources/" + fileName).toPath());
         } catch (IOException e) {
+            System.out.println("File not found: " + fileName);
         }
         return list;
     }

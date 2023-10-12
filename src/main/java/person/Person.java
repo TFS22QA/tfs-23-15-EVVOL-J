@@ -6,13 +6,13 @@ import person.models.appearance.Appearance;
 
 public class Person {
 
-    private String id;
-    private String lastName;
-    private String firstName;
-    private String middleName;
-    private Physical phys;
-    private Appearance appearance;
-    private Phone phone;
+    private final String id;
+    private final String lastName;
+    private final String firstName;
+    private final String middleName;
+    private final Physical phys;
+    private final Appearance appearance;
+    private final Phone phone;
 
     public Person(String id, String lastName, String firstName, String middleName,
                   Physical phys, Appearance appearance, Phone phone) {

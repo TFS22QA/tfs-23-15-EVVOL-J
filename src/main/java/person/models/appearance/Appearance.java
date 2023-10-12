@@ -2,8 +2,6 @@ package person.models.appearance;
 
 import person.models.appearance.enums.EyesColor;
 
-import java.util.Locale;
-
 public class Appearance {
 
     private final EyesColor eyes;
