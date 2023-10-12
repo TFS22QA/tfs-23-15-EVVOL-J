@@ -1,6 +1,6 @@
 package person.models;
 
-public class Phone extends Param {
+public class Phone {
 
     private final String number;
 

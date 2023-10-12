@@ -1,8 +1,6 @@
 package person.models.appearance;
 
-import person.models.Param;
-
-public class Appearance extends Param {
+public class Appearance {
 
     private final String eyes;
     private final Hair hair;

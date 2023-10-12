@@ -19,7 +19,7 @@ public class ParamGenerator {
      *
      * @return .
      */
-    public Appearance gen_Ap(final int c) {
+    public static Appearance gen_Ap(final int c) {
         final int i = c % 100 / 10;
         String e = EyesColor.values()[i / 2].name().toLowerCase();
         String hc = null;
@@ -29,31 +29,22 @@ public class ParamGenerator {
         return new Appearance(e, new Hair(i, hc));
     }
 
-    /**
-     * сумма цифр в коде.
-     */
-    public String lngeneration(final int c) {
-        final int i = getDigitsSum(c);
+    public static String lastNameGenerator(final int code) {
+        final int i = getDigitsSum(code);
         final String s = (i % 2 == 0) ? "f" : "m";
         return getLinesFromFile("lastNames_" + s).get(i);
     }
 
-    /**
-     * сумма первых двух цифр.
-     */
-    public String fngeneration(final int c) {
-        final int i = getDigitsSum(c);
+    public static String firstNameGeneration(final int code) {
+        final int i = getDigitsSum(code);
         final String s = (i % 2 == 0) ? "f" : "m";
-        return getLinesFromFile("names_" + s).get(getDigitsSum(c / 100));
+        return getLinesFromFile("names_" + s).get(getDigitsSum(code / 100));
     }
 
-    /**
-     * сумма последних двух цифр.
-     */
-    public String mngeneration(final int c) {
-        final int i = getDigitsSum(c);
+    public static String middleNameGeneration(final int code) {
+        final int i = getDigitsSum(code);
         final String s = (i % 2 == 0) ? "f" : "m";
-        return getLinesFromFile("middleNames_" + s).get(getDigitsSum(c % 100));
+        return getLinesFromFile("middleNames_" + s).get(getDigitsSum(code % 100));
     }
 
     /**
@@ -62,7 +53,7 @@ public class ParamGenerator {
      * Вес: 30..120
      * Рост: 1..1,9
      */
-    public Physical GenPh(final int c) {
+    public static Physical GenPh(final int c) {
         final int x = c % 1000 / 100;
         int v = (x + 1) * 10;
         int k = 30 + x * 10;
